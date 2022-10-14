@@ -52,7 +52,6 @@ atlassian-ide-plugin.xml
 # Distribution / packaging 
 .Python build/ 
 develop-eggs/ 
-dist/ 
 downloads/ 
 eggs/ 
 .eggs/ 
@@ -138,7 +137,7 @@ GitHub.sublime-settings
 
 .DS_STORE
 
-/dist/
+
 /bazel-out
 /integration/bazel/bazel-*
 *.log
@@ -177,8 +176,6 @@ yarn-error.log
 # build-analytics
 .build-analytics
 
-# rollup-test output
-/modules/rollup-test/dist/
 
 # User specific bazel settings
 .bazelrc.user
