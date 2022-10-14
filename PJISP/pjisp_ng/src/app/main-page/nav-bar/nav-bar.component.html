@@ -1,0 +1,35 @@
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-info" id="navBar">
+  <a class="navbar-brand" href="logged">
+    <span class="text-light">PJISP</span>
+  </a>
+    <div class="collapse navbar-collapse" id="navBar1">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active text-light">
+          <a class="nav-link" href="/results">Upload Results</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active text-light">
+          <a class="nav-link" href="/statistics">Statistics</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav mr-auto" *ngIf="isAdmin !='false'" >
+        <li class="nav-item active text-light">
+          <a class="nav-link" href="/add_user">Add User</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav mr-auto" *ngIf="isAdmin !='false'" >
+        <li class="nav-item active text-light">
+          <a class="nav-link" href="/logs">Logs</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active text-light">
+          <a class="nav-link" href="#" (click)="logout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+

@@ -1,0 +1,48 @@
+<div id="fomr_div" class = "container align-content-center align-items-center" >
+  <div class = "row">
+    <div class="offset-3"></div>
+    <div class="col-md-6">
+      <br/>
+      <form name = "resultsForm"  (ngSubmit) = "sendResults()" novalidate>
+        <div class="form-group">
+          <label>Results Type</label>
+          <select id="sType" class="form-control" [(ngModel)]="selectedType" [ngModelOptions]="{standalone:true}">
+            <option *ngFor="let type of resultTypes; let i = index;" [value]="resultTypes[i]">
+              {{resultTypes[i]}}
+            </option>
+          </select>
+        </div>
+        <div class = "form-group">
+          <label>File: </label>
+          <input name="file" type = "file" id="gFile" class="form-control" (change)="fileChange($event)"/>
+        </div>
+        <div class="form-group" *ngIf="selectedType === 'Exam Result' ">
+          <label>Partial 1</label>
+          <br/>
+          <input type="radio" name="examType" [value]="1" [(ngModel)]="selectedExamType" id="partial1" [disabled]="selectedType!=='Exam Result'">
+          <br/>
+          <label>Partial 2</label>
+          <br/>
+          <input type="radio" name="examType" [value]="2" [(ngModel)]="selectedExamType" id="partial2" [disabled]="selectedType!=='Exam Result'">
+          <br/>
+          <label>Full Exam</label>
+          <br/>
+          <input type="radio" name="examType" id="fullExam" [value]="3" [(ngModel)]="selectedExamType" [disabled]="selectedType!=='Exam Result'">
+          <br/>
+        </div>
+        <div class="form-group" *ngIf="selectedType === 'Test Result'">
+          <label>T1234</label>
+          <br/>
+          <input type="radio" name="examType" [value]="1" [(ngModel)]="selectedTestType" id="t1234" [disabled]="selectedType!=='Test Result'">
+          <br/>
+          <label>SOV</label>
+          <br/>
+          <input type="radio" name="examType" [value]="2" [(ngModel)]="selectedTestType" id="sov" [disabled]="selectedType!=='Test Result'">
+          <br/>
+        </div>
+        <br/>
+        <button type = "submit" class = "btn btn-primary">Add</button>
+      </form>
+    </div>
+  </div>
+</div>

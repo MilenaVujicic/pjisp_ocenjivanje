@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  pjisp_server:
+    build: ./pjisp_server
+    container_name: pjisp_server
+    restart: on-failure:10
+    depends_on:
+      - postgres_db
+    env_file:
+      - ./secrets_folder/docker_vars.env
+    ports:
+      - "8000:8000"
+
+  pjisp_ng:
+    build: ./pjisp_ng
+    container_name: pjisp_ng
+    restart: on-failure:10
+    links:
+      - pjisp_server
+    ports:
+      - "8080:8080"
+
+  postgres_db:
+    image: postgres:14-bullseye
+    restart: always
+    env_file:
+      - ./secrets_folder/docker_vars.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres_data:/var/lib/postgresq/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+

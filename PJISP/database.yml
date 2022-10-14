@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  postgres_db:
+    image: postgres:14-bullseye
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: 'pjisp_db'
+      POSTGRES_USER: 'admin'
+      POSTGRES_PASSWORD: 'admin'
+
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"

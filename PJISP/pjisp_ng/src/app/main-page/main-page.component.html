@@ -1,0 +1,38 @@
+<div class="container col-5 align-content-center" *ngIf="user_count == 0 && _route.url.includes('index')">
+  <div class="card  align-content-center" id="welcome_card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Welcome</h5>
+      <p class="card-text">Please initialize the app </p>
+      <a href="create_superuser" class="btn btn-primary" (click)="createSuperUser()">Add SuperUser</a>
+    </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="user_count > 0 && (current_user === '' || current_user == null)  && _route.url.includes('index')" >
+  <div class="card  align-content-center" id="login_card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">Welcome</h5>
+      <p class="card-text">Please login to continue </p>
+      <a href="login" class="btn btn-primary" (click)="createSuperUser()">Login</a>
+    </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="user_count > 0 && current_user != ''  && _route.url.includes('logged')" >
+  <app-nav-bar></app-nav-bar>
+</div>
+
+<div class="container" *ngIf="user_count > 0 && current_user != ''  && _route.url.includes('results')" >
+  <app-nav-bar></app-nav-bar>
+  <app-results-page></app-results-page>
+</div>
+
+<div class="container" *ngIf="user_count > 0 && current_user != ''  && _route.url.includes('statistics')" >
+  <app-nav-bar></app-nav-bar>
+  <app-statistics-page></app-statistics-page>
+</div>
+
+<div class="container" *ngIf="user_count > 0 && current_user != '' && _route.url.includes('logs')" >
+  <app-nav-bar></app-nav-bar>
+  <app-logs-page></app-logs-page>
+</div>
