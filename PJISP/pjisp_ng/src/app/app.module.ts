@@ -18,6 +18,7 @@ import { StatisticsPageComponent } from './statistics-page/statistics-page.compo
 import { LogsPageComponent } from './logs-page/logs-page.component';
 import {DecimalPipe} from "@angular/common";
 import {NgxChartsModule} from "@swimlane/ngx-charts";
+import { ChartPageComponent } from './statistics-page/chart-page/chart-page.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {NgxChartsModule} from "@swimlane/ngx-charts";
     UserViewComponent,
     ResultsPageComponent,
     StatisticsPageComponent,
-    LogsPageComponent
+    LogsPageComponent,
+    ChartPageComponent
   ],
   imports: [
     BrowserModule,

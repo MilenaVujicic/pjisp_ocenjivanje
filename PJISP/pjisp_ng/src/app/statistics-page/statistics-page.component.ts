@@ -1,17 +1,39 @@
 import {Component, OnInit, PipeTransform} from '@angular/core';
 import {Log} from "../../models/Log";
 import {HttpClient} from "@angular/common/http";
+import {Chart, registerables } from 'chart.js';
+import {DecimalPipe, UpperCasePipe} from "@angular/common";
+import {Observable} from "rxjs";
+import {FormControl} from "@angular/forms";
+import {map, startWith} from "rxjs/operators";
 
+
+let tableData:Log[] = [];
+function search(text:string, pipe:PipeTransform):Log[]{
+  console.log("SEARCH");
+  return tableData.filter(data => {
+    const term = text.toUpperCase();
+    return data.index_number.includes(term)
+      || pipe.transform(data.first_name).includes(term)
+      || pipe.transform(data.last_name).includes(term);
+  });
+}
 
 @Component({
   selector: 'app-statistics-page',
   templateUrl: './statistics-page.component.html',
-  styleUrls: ['./statistics-page.component.css']
+  styleUrls: ['./statistics-page.component.css'],
+  providers: [UpperCasePipe]
 })
 export class StatisticsPageComponent implements OnInit {
 
   statsOptions: string[] = ["Student Data", "Averages"];
   selectedOption: string = "";
+  gradeMap:Map<string, string>;
+  chart: Chart;
+
+  data$: Observable<Log[]>
+  filter = new FormControl('', {nonNullable: true});
 
   data:Log = {
     date: new Date('1-1-2000'),
@@ -28,48 +50,43 @@ export class StatisticsPageComponent implements OnInit {
 
   }
   allData:Log[];
-
-  x_label:string = "Grades"
-  y_label:string = "Total"
+  displayChart:boolean = false;
 
   grades:number[] = [0, 0, 0, 0, 0, 0] // [5, 6, 7, 8, 9, 10]
-  x_axis:number[] = [5, 6, 7, 8, 9, 10]
 
-  grades_bar = [{
-    "grade": 5, "total": this.grades[0]
-  },
-    {
-      "grade": 6, "total": this.grades[1]
-    },
-    {
-      "grade": 7, "total": this.grades[2]
-    },
-    {
-      "grade": 8, "total": this.grades[3]
-    },
-    {
-      "grade": 9, "total": this.grades[4]
-    },
-    {
-      "grade": 10, "total": this.grades[5]
-    }];
 
-  constructor(private http:HttpClient) {
 
+
+  hidden: Boolean = true;
+  constructor(private http:HttpClient, pipe:UpperCasePipe) {
+    this.data$ = this.filter.valueChanges.pipe(
+      startWith(''),
+      map(text=>search(text, pipe)))
   }
 
   ngOnInit(): void {
     this.logsObservable().subscribe(
       (res:Log[]) => {
-        this.allData = res;
+        tableData = res;
+        this.allData = tableData;
+        for(let d of this.allData){
+          d.grade = this.calculateGrade(d);
+
+        }
+
 
       },
       err=>{
         console.log(err.message);
        // alert("Something went wrong");
-      })
+      });
+
+
   }
 
+  getTableData(){
+    return tableData;
+  }
   logsObservable(){
     let url = "http://";
     let server = "localhost"
@@ -127,12 +144,18 @@ export class StatisticsPageComponent implements OnInit {
       this.grades[0]++;
       return 5
     }
+
   }
 
   averageGrade(){
-    let total = this.grades[5] + this.grades[4] + this.grades[3] +this.grades[2] + this.grades[1];
-    let sum = this.grades[5]*10 + this.grades[4]*9 + this.grades[3]*8 +this.grades[2]*7 + this.grades[1]*6;
-    return sum/total;
+    let total = 0;
+    let sum = 0;
+    let average =0;
+    total = this.grades[5] + this.grades[4] + this.grades[3] +this.grades[2] + this.grades[1];
+    sum = this.grades[5]*10 + this.grades[4]*9 + this.grades[3]*8 +this.grades[2]*7 + this.grades[1]*6;
+    average = sum/total;
+    let average_str = average.toString();
+    return parseFloat(average_str).toFixed(2);
   }
 
   passed(){
@@ -144,9 +167,19 @@ export class StatisticsPageComponent implements OnInit {
   }
 
   percentPassed(){
-    let total = this.grades[5] + this.grades[4] + this.grades[3] +this.grades[2] + this.grades[1] + this.grades[0];
-    let passed = this.grades[5] + this.grades[4] + this.grades[3] +this.grades[2] + this.grades[1];
-    return Math.round(((passed/total)*100)*100)/100;
+    let total = 0;
+    let passed = 0;
+    let average = 0;
+    total = this.grades[5] + this.grades[4] + this.grades[3] +this.grades[2] + this.grades[1] + this.grades[0];
+    passed = this.grades[5] + this.grades[4] + this.grades[3] +this.grades[2] + this.grades[1];
+    average = passed/total * 100;
+    let passed_str = average.toString();
+    return parseFloat(passed_str).toFixed(2);
 
+  }
+
+  showChart():void{
+    localStorage.setItem("grades", JSON.stringify(this.grades));
+    this.displayChart = !this.displayChart;
   }
 }

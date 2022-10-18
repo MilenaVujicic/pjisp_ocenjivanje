@@ -80,7 +80,8 @@ def prepare_df_data(df, exam_type, test):
 
 
 def prepare_sheet_writing(sheet_vals, df):
-    sheet_df = pd.DataFrame(sheet_vals[1:], columns=sheet_vals[0])
+    sheet_df = pd.DataFrame(sheet_vals, columns=sheet_vals[0])
+    sheet_df = sheet_df.iloc[1: , :]
     new_df_outer = pd.merge(sheet_df, df, left_on="02. Broj indeksa", right_on="02. Broj indeksa",
                                how="outer").groupby(
         lambda x: x.split('_')[0], axis=1).last()
@@ -345,9 +346,14 @@ def get_statistics(request):
         sheet_vals_psi = open_sheet_for_reading(service, range_psi, environ.get("SHEET_ID"))
         sheet_vals_old = open_sheet_for_reading(service, range_old, environ.get("SHEET_ID"))
 
-        sheet_df_ra = pd.DataFrame(sheet_vals_ra[1:], columns=sheet_vals_ra[0])
-        sheet_df_psi = pd.DataFrame(sheet_vals_psi[1:], columns=sheet_vals_psi[0])
-        sheet_df_old = pd.DataFrame(sheet_vals_old[1:], columns=sheet_vals_old[0])
+        sheet_df_ra = pd.DataFrame(sheet_vals_ra, columns=sheet_vals_ra[0])
+        sheet_df_ra = sheet_df_ra.iloc[1:, :]
+
+        sheet_df_psi = pd.DataFrame(sheet_vals_psi, columns=sheet_vals_psi[0])
+        sheet_df_psi = sheet_df_psi.iloc[1:, :]
+
+        sheet_df_old = pd.DataFrame(sheet_vals_old, columns=sheet_vals_old[0])
+        sheet_df_old = sheet_df_old.iloc[1:, :]
 
         dfs = [sheet_df_ra, sheet_df_psi, sheet_df_old]
         stats = stats_serializer(dfs)
